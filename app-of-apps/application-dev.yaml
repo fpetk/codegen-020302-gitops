@@ -1,0 +1,25 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: codegen-020302-app
+  namespace: ai-rhdh
+  finalizers: ["resources-finalizer.argocd.argoproj.io"]
+spec:
+  project: default
+  source:
+    path: ./components/codegen-020302/overlays/development
+    repoURL: https://github.com/fpetk/codegen-020302-gitops.git
+    targetRevision: main
+  destination:
+    namespace: default
+    server: https://api.wg5jn-nyc32-n9d.s9iu.p3.openshiftapps.com:443
+  syncPolicy:
+    managedNamespaceMetadata:
+      labels:
+        argocd.argoproj.io/managed-by: ai-rhdh
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - PruneLast=true
